@@ -47,7 +47,6 @@ export default function Tred() {
             gltf.scene.traverse((child) => {
                 if (child.isMesh) {
                     // Altere as propriedades do material aqui
-                    console.log(child.material.map);
                     child.material.map = imagem;
                     child.material.needsUpdate = true;
                 }
