@@ -17,6 +17,21 @@ export default function Tred() {
         const renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current, alpha: true }); // Set alpha to true for transparent background
         renderer.setSize(window.innerWidth, window.innerHeight);
 
+        const textureLoader = new TextureLoader();
+        const texture = textureLoader.load('mesa.png'); // Carrega a textura da imagem
+      
+       // Criar um plano para o cenário
+        const geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
+        const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, wireframeLinewidth: 2 });
+        const cenario = new THREE.Mesh(geometry, material);
+
+        // Posicionar e rotacionar o cenário
+        cenario.rotation.x = -Math.PI / 2; // Rotaciona o plano para que fique no plano horizontal
+        cenario.position.y = -0.032; // Ajusta a posição vertical do cenário
+
+        // Adicionar o cenário à cena
+        scene.add(cenario);
+
         const loader = new GLTFLoader();
 
         scene.add(ambientLight);
@@ -28,7 +43,6 @@ export default function Tred() {
                 gltf.scene.traverse((child) => {
                     if (child.isMesh) {
                         if (child.material.map) {
-                            child.material.map = texture;
                             child.material.needsUpdate = true;
                         }
                     }
@@ -55,9 +69,9 @@ export default function Tred() {
 
         animate();
 
-    }, [texture]);
+    }, []);
 
-    useEffect(() => {
+    /* useEffect(() => {
         // Função para carregar a textura quando o componente for montado
         const textureLoader = new TextureLoader();
         textureLoader.load(
@@ -67,12 +81,11 @@ export default function Tred() {
                 console.log('Texture loaded:', texture);
                 setTexture(texture); // Define a textura carregada no estado
             },
-            undefined,
             (error) => {
                 console.error('Error loading texture:', error);
             }
         );
-    }, []);
+    }, []); */
 
     return <canvas ref={canvasRef} style={{ background: '#000' }} />;
 }
